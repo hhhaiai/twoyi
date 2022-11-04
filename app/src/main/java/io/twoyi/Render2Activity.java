@@ -42,6 +42,7 @@ import com.cleveroad.androidmanimation.LoadingAnimationView;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.twoyi.utils.AppKV;
 import io.twoyi.utils.LogEvents;
 import io.twoyi.utils.NavUtils;
 import io.twoyi.utils.RomManager;
@@ -97,6 +98,19 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean started = TwoyiStatusManager.getInstance().isStarted();
+        Log.i(TAG, "onCreate: " + savedInstanceState + " isStarted: " + started);
+
+        if (started) {
+            // we have been started, but WTF we are onCreate again? just reboot ourself.
+            finish();
+            RomManager.reboot(this);
+            return;
+        }
+
+        // reset state
+        TwoyiStatusManager.getInstance().reset();
+
         NavUtils.hideNavigation(getWindow());
 
         super.onCreate(savedInstanceState);
@@ -121,15 +135,32 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
 
     }
 
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "onRestoreInstanceState: " + savedInstanceState);
+
+        // we don't support state restore, just reboot.
+        finish();
+        RomManager.reboot(this);
+    }
+
     private void bootSystem() {
-        if (!RomManager.romExist(this) || RomManager.needsUpgrade(this)) {
+        boolean romExist = RomManager.romExist(this);
+        boolean factoryRomUpdated = RomManager.needsUpgrade(this);
+        boolean forceInstall = AppKV.getBooleanConfig(getApplicationContext(), AppKV.FORCE_ROM_BE_RE_INSTALL, false);
+        boolean use3rdRom = AppKV.getBooleanConfig(getApplicationContext(), AppKV.SHOULD_USE_THIRD_PARTY_ROM, false);
+
+        boolean shouldExtractRom = !romExist || forceInstall || (!use3rdRom && factoryRomUpdated);
+
+        if (shouldExtractRom) {
             Log.i(TAG, "extracting rom...");
 
             showTipsForFirstBoot();
 
             new Thread(() -> {
                 mIsExtracting.set(true);
-                RomManager.extractRootfs(getApplicationContext());
+                RomManager.extractRootfs(getApplicationContext(), romExist, factoryRomUpdated, forceInstall, use3rdRom);
                 mIsExtracting.set(false);
 
                 RomManager.initRootfs(getApplicationContext());
@@ -176,7 +207,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
                 boolean success = false;
                 try {
                     success = TwoyiStatusManager.getInstance().waitBoot(15, TimeUnit.SECONDS);
-                } catch (InterruptedException ignored) {
+                } catch (Throwable ignored) {
                 }
 
                 if (!success) {
@@ -237,7 +268,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
         WindowManager windowManager = getWindowManager();
         Display defaultDisplay = windowManager.getDefaultDisplay();
         Display.Mode[] supportedModes = defaultDisplay.getSupportedModes();
-        float fps = 60;
+        float fps = 45;
         for (Display.Mode supportedMode : supportedModes) {
             float refreshRate = supportedMode.getRefreshRate();
             if (refreshRate > fps) {
