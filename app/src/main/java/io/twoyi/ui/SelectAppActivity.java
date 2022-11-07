@@ -342,18 +342,18 @@ public class SelectAppActivity extends AppCompatActivity {
 
         // start copy and install
         UIHelper.defer().when(() -> {
-            List<File> files = copyFilesFromUri(fileUris);
+                    List<File> files = copyFilesFromUri(fileUris);
 
-            Log.i(TAG, "files copied: " + files);
+                    Log.i(TAG, "files copied: " + files);
 
-            boolean allValid = Installer.checkFile(getApplicationContext(), files);
-            if (!allValid) {
-                IOUtils.deleteAll(files);
-                throw new RuntimeException("invalid apk file!");
-            }
+                    boolean allValid = Installer.checkFile(getApplicationContext(), files);
+                    if (!allValid) {
+                        IOUtils.deleteAll(files);
+                        throw new RuntimeException("invalid apk file!");
+                    }
 
-            return files;
-        }).done(result -> startInstall(result, dialog, false))
+                    return files;
+                }).done(result -> startInstall(result, dialog, false))
                 .fail(result -> runOnUiThread(() -> {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.install_failed_reason, result.getMessage()), Toast.LENGTH_SHORT).show();
                     dialog.dismiss();

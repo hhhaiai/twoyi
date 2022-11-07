@@ -49,7 +49,6 @@ import io.twoyi.utils.ShellUtil;
  * @author weishu
  * @date 2022/1/1.
  */
-
 public class BootLogTexture extends TextureView implements TextureView.SurfaceTextureListener {
 
     private final AtomicBoolean mRendering = new AtomicBoolean(false);

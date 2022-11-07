@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -42,6 +41,7 @@ import com.cleveroad.androidmanimation.LoadingAnimationView;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.twoyi.utils.Alog;
 import io.twoyi.utils.AppKV;
 import io.twoyi.utils.LogEvents;
 import io.twoyi.utils.NavUtils;
@@ -79,27 +79,27 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
 
             Renderer.init(surface, RomManager.getLoaderPath(getApplicationContext()), xdpi, ydpi, (int) getBestFps());
 
-            Log.i(TAG, "surfaceCreated");
+            Alog.i(TAG, "surfaceCreated");
         }
 
         @Override
         public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
             Surface surface = holder.getSurface();
             Renderer.resetWindow(surface, 0, 0, mSurfaceView.getWidth(), mSurfaceView.getHeight());
-            Log.i(TAG, "surfaceChanged: " + mSurfaceView.getWidth() + "x" + mSurfaceView.getHeight());
+            Alog.i(TAG, "surfaceChanged: " + mSurfaceView.getWidth() + "x" + mSurfaceView.getHeight());
         }
 
         @Override
         public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
             Renderer.removeWindow(holder.getSurface());
-            Log.i(TAG, "surfaceDestroyed!");
+            Alog.i(TAG, "surfaceDestroyed!");
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         boolean started = TwoyiStatusManager.getInstance().isStarted();
-        Log.i(TAG, "onCreate: " + savedInstanceState + " isStarted: " + started);
+        Alog.i(TAG, "onCreate: " + savedInstanceState + " isStarted: " + started);
 
         if (started) {
             // we have been started, but WTF we are onCreate again? just reboot ourself.
@@ -121,6 +121,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
         mSurfaceView = new SurfaceView(this);
         mSurfaceView.getHolder().addCallback(mSurfaceCallback);
 
+
         mLoadingLayout = findViewById(R.id.loadingLayout);
         mLoadingView = findViewById(R.id.loading);
         mLoadingText = findViewById(R.id.loadingText);
@@ -138,7 +139,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.i(TAG, "onRestoreInstanceState: " + savedInstanceState);
+        Alog.i(TAG, "onRestoreInstanceState: " + savedInstanceState);
 
         // we don't support state restore, just reboot.
         finish();
@@ -154,7 +155,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
         boolean shouldExtractRom = !romExist || forceInstall || (!use3rdRom && factoryRomUpdated);
 
         if (shouldExtractRom) {
-            Log.i(TAG, "extracting rom...");
+            Alog.i(TAG, "extracting rom...");
 
             showTipsForFirstBoot();
 
@@ -251,7 +252,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.d(TAG, "onKeyDown: " + keyCode);
+        Alog.d(TAG, "onKeyDown: " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             // TODO: 2021/10/26 Add Volume control
         }
@@ -276,7 +277,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
             }
         }
 
-        Log.w(TAG, "current fps: " + fps);
+        Alog.w(TAG, "current fps: " + fps);
         return fps;
     }
 }

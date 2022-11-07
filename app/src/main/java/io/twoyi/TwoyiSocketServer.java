@@ -100,7 +100,6 @@ public class TwoyiSocketServer {
             }
         } catch (IOException e) {
             Log.e(TAG, "start socket failed", e);
-
             mStarted.set(false);
 
             // start it again

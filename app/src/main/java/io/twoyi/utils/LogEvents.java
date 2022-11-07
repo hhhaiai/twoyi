@@ -10,8 +10,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 
-import com.microsoft.appcenter.crashes.Crashes;
-import com.microsoft.appcenter.crashes.ingestion.models.ErrorAttachmentLog;
+//import com.microsoft.appcenter.crashes.Crashes;
+//import com.microsoft.appcenter.crashes.ingestion.models.ErrorAttachmentLog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,11 +36,11 @@ public class LogEvents {
     private static final RuntimeException BOOT_FAILURE = new RuntimeException("BootFailureException");
 
     public static void trackError(Throwable e) {
-        Crashes.trackError(e);
+//        Crashes.trackError(e);
     }
-    public static void trackError(Throwable e, Map<String, String> properties, Iterable<ErrorAttachmentLog> attachments) {
-        Crashes.trackError(e, properties, attachments);
-    }
+//    public static void trackError(Throwable e, Map<String, String> properties, Iterable<ErrorAttachmentLog> attachments) {
+//        Crashes.trackError(e, properties, attachments);
+//    }
 
     public static void trackBootFailure(Context context) {
 
@@ -51,11 +51,12 @@ public class LogEvents {
         properties.put("rom_author", info.author);
         properties.put("rom_md5", info.md5);
 
-        List<ErrorAttachmentLog> errors = new ArrayList<>();
-
-        errors.add(ErrorAttachmentLog.attachmentWithBinary(getBugreport(context), "bugreport.zip", "application/zip"));
-
-        trackError(BOOT_FAILURE, properties, errors);
+        Alog.e(properties.toString());
+//        List<ErrorAttachmentLog> errors = new ArrayList<>();
+//
+//        errors.add(ErrorAttachmentLog.attachmentWithBinary(getBugreport(context), "bugreport.zip", "application/zip"));
+//
+//        trackError(BOOT_FAILURE, properties, errors);
     }
 
     public static File getLogcatFile(Context context) {

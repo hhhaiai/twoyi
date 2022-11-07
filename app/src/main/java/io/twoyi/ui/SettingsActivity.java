@@ -28,8 +28,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.util.Pair;
 
-import com.microsoft.appcenter.crashes.Crashes;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,6 +36,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 
 import io.twoyi.R;
+import io.twoyi.utils.Alog;
 import io.twoyi.utils.AppKV;
 import io.twoyi.utils.LogEvents;
 import io.twoyi.utils.RomManager;
@@ -47,7 +46,6 @@ import io.twoyi.utils.UIHelper;
  * @author weishu
  * @date 2022/1/2.
  */
-
 public class SettingsActivity extends AppCompatActivity {
 
     private static final int REQUEST_GET_FILE = 1000;
@@ -183,7 +181,8 @@ public class SettingsActivity extends AppCompatActivity {
                 try {
                     Files.write(tmpLog.toPath(), bugreport);
                 } catch (IOException e) {
-                    Crashes.trackError(e);
+//                    Crashes.trackError(e);
+                    Alog.e(e);
                 }
                 Uri uri = FileProvider.getUriForFile(context, "io.twoyi.fileprovider", tmpLog);
 

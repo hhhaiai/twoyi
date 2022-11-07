@@ -47,20 +47,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AboutPage mPage = new AboutPage(this)
-                .isRTL(false)
-                .setImage(R.mipmap.ic_launcher)
-                .addItem(getCopyRightsElement())
-                .addItem(getAuthorElement())
-                .addItem(getVersionElement())
-                .addItem(getCheckUpdateElement())
-                .addItem(getWeChatPublicNumberElement())
-                .addItem(getWebsiteElement())
-                .addItem(getFaqElement())
-                .addItem(getFeedbackEmailElement())
-                .addItem(getFeedbackTelegramElement())
-                .addItem(getLicenseElement())
-                .addItem(getPrivacyElement());
+        AboutPage mPage = new AboutPage(this).isRTL(false).setImage(R.mipmap.ic_launcher).addItem(getCopyRightsElement()).addItem(getAuthorElement()).addItem(getVersionElement()).addItem(getCheckUpdateElement()).addItem(getWeChatPublicNumberElement()).addItem(getWebsiteElement()).addItem(getFaqElement()).addItem(getFeedbackEmailElement()).addItem(getFeedbackTelegramElement()).addItem(getLicenseElement()).addItem(getPrivacyElement());
 
         mPage.setDescription(getResources().getString(R.string.app_name));
 
@@ -140,34 +127,19 @@ public class AboutActivity extends AppCompatActivity {
         Element author = new Element();
         author.setTitle(getResources().getString(R.string.about_author));
         author.setOnClickListener(v -> {
-            String[] contacts = new String[]{
-                    getResources().getString(R.string.about_author_github),
-                    getResources().getString(R.string.about_author_zhihu),
-                    getResources().getString(R.string.about_author_xda),
-                    getResources().getString(R.string.about_author_coolapk),
-                    getResources().getString(R.string.about_author_email),
-            };
+            String[] contacts = new String[]{getResources().getString(R.string.about_author_github), getResources().getString(R.string.about_author_zhihu), getResources().getString(R.string.about_author_xda), getResources().getString(R.string.about_author_coolapk), getResources().getString(R.string.about_author_email),};
 
-            String[] urls = new String[]{"https://github.com/tiann",
-                    "https://www.zhihu.com/people/tian-weishu",
-                    "https://forum.xda-developers.com/member.php?u=8994560",
-                    "http://www.coolapk.com/u/1257513",
-                    "mailto:twsxtd@gmail.com",
-            };
+            String[] urls = new String[]{"https://github.com/tiann", "https://www.zhihu.com/people/tian-weishu", "https://forum.xda-developers.com/member.php?u=8994560", "http://www.coolapk.com/u/1257513", "mailto:twsxtd@gmail.com",};
 
-            AlertDialog alertDialog = UIHelper.getDialogBuilder(this)
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setTitle(R.string.about_author_contact)
-                    .setItems(contacts, (dialog, which) -> {
-                        try {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse(urls[which]));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } catch (Throwable ignored) {
-                        }
-                    })
-                    .create();
+            AlertDialog alertDialog = UIHelper.getDialogBuilder(this).setIcon(R.mipmap.ic_launcher).setTitle(R.string.about_author_contact).setItems(contacts, (dialog, which) -> {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(urls[which]));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (Throwable ignored) {
+                }
+            }).create();
             UIHelper.show(alertDialog);
         });
         return author;
@@ -203,17 +175,13 @@ public class AboutActivity extends AppCompatActivity {
         emailElement.setTitle(title);
 
         emailElement.setOnClickListener(v -> {
-            AlertDialog alertDialog = UIHelper.getDialogBuilder(AboutActivity.this)
-                    .setTitle(R.string.about_feedback_title)
-                    .setMessage(R.string.feedback_confirm)
-                    .setPositiveButton(R.string.feedback_ok, (dialog, which) -> {
-                        Uri uri = Uri.parse("mailto:" + email);
-                        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-                        intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
-                    }).setNegativeButton(R.string.read_faq_text, (dialog, which) -> {
-                        UIHelper.showFAQ(this);
-                    })
-                    .create();
+            AlertDialog alertDialog = UIHelper.getDialogBuilder(AboutActivity.this).setTitle(R.string.about_feedback_title).setMessage(R.string.feedback_confirm).setPositiveButton(R.string.feedback_ok, (dialog, which) -> {
+                Uri uri = Uri.parse("mailto:" + email);
+                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
+            }).setNegativeButton(R.string.read_faq_text, (dialog, which) -> {
+                UIHelper.showFAQ(this);
+            }).create();
             UIHelper.show(alertDialog);
         });
         return emailElement;
@@ -224,32 +192,20 @@ public class AboutActivity extends AppCompatActivity {
         Element license = new Element();
         license.setTitle(getResources().getString(R.string.notices_title));
         Notices notices = new Notices();
-        notices.addNotice(new Notice("AndroidP7Zip", "https://github.com/hzy3774/AndroidP7zip",
-                "7-Zip Copyright (C) 1999-2020 Igor Pavlov.",new GnuLesserGeneralPublicLicense3()));
-        notices.addNotice(new Notice("termux-adb-fastboot", "https://github.com/rendiix/termux-adb-fastboot",
-                "Copyright (c) 2022 rendiix", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("AndroidP7Zip", "https://github.com/hzy3774/AndroidP7zip", "7-Zip Copyright (C) 1999-2020 Igor Pavlov.", new GnuLesserGeneralPublicLicense3()));
+        notices.addNotice(new Notice("termux-adb-fastboot", "https://github.com/rendiix/termux-adb-fastboot", "Copyright (c) 2022 rendiix", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("libsu", "https://github.com/topjohnwu/libsu", "topjohnwu", new ApacheSoftwareLicense20()));
         notices.addNotice(new Notice("qemu", "https://android.googlesource.com/platform/external/qemu", "qemu", new GnuGeneralPublicLicense20()));
-        notices.addNotice(new Notice("LicenseDialog", "https://github.com/PSDev/LicensesDialog",
-                "Copyright 2013 Philip Schiffer", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("material-dialogs", "https://github.com/afollestad/material-dialogs",
-                "Aidan Follestad (@afollestad)", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("FloatingActionButton", "https://github.com/Clans/FloatingActionButton",
-                "Clans", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("android-about-page", "https://github.com/medyo/android-about-page",
-                "Copyright (c) 2016 Mehdi Sakout", new MITLicense()));
-        notices.addNotice(new Notice("AlipayZeroSdk", "https://github.com/fython/AlipayZeroSdk",
-                "Copyright 2016 Fung Go (fython)", new ApacheSoftwareLicense20()));
-        notices.addNotice(new Notice("Glide", "https://github.com/bumptech/glide",
-                "Copyright 2014 Google, Inc.", new BSD2ClauseLicense()));
-        notices.addNotice(new Notice("Once", "https://github.com/jonfinerty/Once",
-                "Copyright 2018 Jon Finerty", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("LicenseDialog", "https://github.com/PSDev/LicensesDialog", "Copyright 2013 Philip Schiffer", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("material-dialogs", "https://github.com/afollestad/material-dialogs", "Aidan Follestad (@afollestad)", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("FloatingActionButton", "https://github.com/Clans/FloatingActionButton", "Clans", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("android-about-page", "https://github.com/medyo/android-about-page", "Copyright (c) 2016 Mehdi Sakout", new MITLicense()));
+        notices.addNotice(new Notice("AlipayZeroSdk", "https://github.com/fython/AlipayZeroSdk", "Copyright 2016 Fung Go (fython)", new ApacheSoftwareLicense20()));
+        notices.addNotice(new Notice("Glide", "https://github.com/bumptech/glide", "Copyright 2014 Google, Inc.", new BSD2ClauseLicense()));
+        notices.addNotice(new Notice("Once", "https://github.com/jonfinerty/Once", "Copyright 2018 Jon Finerty", new ApacheSoftwareLicense20()));
 
         license.setOnClickListener(v -> {
-            LicensesDialog licensesDialog = new LicensesDialog.Builder(AboutActivity.this)
-                    .setThemeResourceId(R.style.Theme_AppCompat_DayNight_Dialog_Alert)
-                    .setNotices(notices)
-                    .build();
+            LicensesDialog licensesDialog = new LicensesDialog.Builder(AboutActivity.this).setThemeResourceId(R.style.Theme_AppCompat_DayNight_Dialog_Alert).setNotices(notices).build();
             try {
                 licensesDialog.show();
             } catch (Throwable ignored) {

@@ -22,12 +22,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
+//import com.microsoft.appcenter.AppCenter;
+//import com.microsoft.appcenter.analytics.Analytics;
+//import com.microsoft.appcenter.crashes.Crashes;
 
 import java.lang.reflect.Field;
 
+import io.twoyi.utils.Alog;
 import io.twoyi.utils.RomManager;
 
 /**
@@ -41,20 +42,27 @@ public class TwoyiApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        RomManager.ensureBootFiles(base);
-
-        TwoyiSocketServer.getInstance(base).start();
+       try{
+           RomManager.ensureBootFiles(base);
+           TwoyiSocketServer.getInstance(base).start();
+       }catch (Throwable e){
+           Alog.e(e);
+       }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+//        try{
+//            AppCenter.start(this, "6223c2b1-30ab-4293-8456-ac575420774e",
+//                    Analytics.class, Crashes.class);
+//            if (BuildConfig.DEBUG) {
+//                AppCenter.setEnabled(false);
+//            }
+//        }catch (Throwable e){
+//            Alog.e(e);
+//        }
 
-        AppCenter.start(this, "6223c2b1-30ab-4293-8456-ac575420774e",
-                Analytics.class, Crashes.class);
-        if (BuildConfig.DEBUG) {
-            AppCenter.setEnabled(false);
-        }
     }
 
     static int statusBarHeight = -1;
