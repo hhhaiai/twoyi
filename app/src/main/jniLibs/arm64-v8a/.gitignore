@@ -3,7 +3,7 @@ rootfs.*
 /release/
 libtwoyi.so
 rom.ini
-baseline.prof
+
 .externalNativeBuild
 import-summary.txt
 
